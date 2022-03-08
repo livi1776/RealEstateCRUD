@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} Home {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col md-1">
+                <div class="jumbotron p-1">
+                    <h2> <b>County Vaccination Rate and House Price Change</b>  <button type="button"  class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Create County</button> </h2>
+                    <table class="table table-hover table-info">
+                        <tr>
+                            <th>County</th>
+                            <th>Completed Vaccinations</th>
+                            <th>Completed Vaccinations %</th>
+                            <th>House price % Change</th>
+                        </tr>
+                        {% for row in county %}
+                            <tr>
+                                <td>{{row.county}}</td>
+                                <td>{{row.vacs_complete}}</td>
+                                <td>{{row.vacs_complete_per}}</td>
+                                <td>{{row.house}}</td>
+                                <td>
+                                    <a href="/update/{{row.county}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.county}}">Update</a>
+                                    <a href="/delete/{{row.county}}" class="btn btn-danger btn-xs">Delete</a>
+                                </td>
+                            </tr>
+
+                            <!-- Query Update County-->
+                            <div id="modaledit{{row.county}}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Update Information</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{url_for('update')}}" method="POST">
+                                                <div class="form-group">
+                                                    <label>Vac Complete:</label>
+                                                    <input type="text" class="form-control" name="vacs_complete" value="{{row.vacs_complete}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Vac Complete %:</label>
+                                                    <input type="text" class="form-control" name="vacs_complete_per" value="{{row.vacs_complete_per}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>House Price %: </label>
+                                                    <input type="text" class="form-control" name="house" value="{{row.house}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary" type="submit">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <!-- Query Add County-->
+                <div id="mymodal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Add County</h3>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('add')}}" method="POST">
+                                    <div class="form-group">
+                                        <label>County:</label>
+                                        <input type="text" class="form-control" name="county" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vac Complete:</label>
+                                        <input type="text" class="form-control" name="vacs_complete" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vac Complete %:</label>
+                                        <input type="text" class="form-control" name="vacs_complete_per" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>House Price %:</label>
+                                        <input type="text" class="form-control" name="house" required="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Add County</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
